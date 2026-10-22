@@ -37,6 +37,20 @@ nav a{text-decoration:none;position:relative}
 nav ul a::after{content:"";position:absolute;left:0;right:0;bottom:-3px;height:1px;background:currentColor;transform:scaleX(0);transform-origin:left;transition:transform .35s}
 nav ul a:hover::after,nav ul a.on::after{transform:scaleX(1)}
 @media(max-width:640px){nav ul{gap:14px;font-size:14px}nav .mark{font-size:16px}}
+nav .menu{display:none;position:relative;width:44px;height:44px;margin-right:-10px;background:none;border:0;cursor:pointer;color:inherit}
+nav .menu i{position:absolute;left:11px;right:11px;height:1.5px;background:currentColor;transition:transform .3s,top .3s}
+nav .menu i:nth-child(1){top:17px}nav .menu i:nth-child(2){top:26px}
+nav.open .menu i:nth-child(1){top:21.5px;transform:rotate(45deg)}
+nav.open .menu i:nth-child(2){top:21.5px;transform:rotate(-45deg)}
+@media(max-width:720px){
+  nav{padding-top:10px;padding-bottom:10px}
+  nav .menu{display:block}
+  nav ul{display:none;position:absolute;top:100%;left:0;right:0;flex-direction:column;gap:0;background:var(--paper);border-bottom:1px solid var(--line);padding:4px var(--pad) 20px}
+  nav.open ul{display:flex}
+  nav ul a{display:block;padding:14px 0;font-size:20px;font-family:var(--display)}
+  nav ul a::after{display:none}
+  nav ul a.on{color:var(--accent)}
+}
 
 /* hero */
 .hero{position:relative;height:100svh;min-height:560px;padding:0;overflow:hidden;background:#cfd3ff;display:grid;align-items:end}
@@ -57,8 +71,8 @@ nav ul a:hover::after,nav ul a.on::after{transform:scaleX(1)}
 
 /* shared image placeholder: shows a tinted gradient until the real file loads */
 .frame{position:relative;overflow:hidden;background:linear-gradient(135deg,var(--a,#e9e7ff),var(--b,#ffe6d6))}
-.frame img{width:100%;height:100%;object-fit:cover;transition:transform .9s cubic-bezier(.2,.7,.2,1)}
-.frame.ph img{opacity:0}
+.frame img{width:100%;height:100%;object-fit:cover;transition:transform .9s cubic-bezier(.2,.7,.2,1),opacity .6s ease}
+.frame.ph img,.frame img.fade{opacity:0}
 
 /* projects: modular 12-col grid */
 .head{display:flex;justify-content:space-between;align-items:end;gap:32px;flex-wrap:wrap;margin-bottom:clamp(40px,6vw,88px)}
@@ -129,6 +143,7 @@ dialog::backdrop{background:rgba(255,255,255,.96)}
 @media(max-width:560px){.about .tools dl{grid-template-columns:1fr;gap:2px}.about .tools dd{margin-bottom:12px}}
 .about dd a{color:var(--ink);text-decoration:underline;text-decoration-color:var(--line);text-underline-offset:4px;transition:color .2s,text-decoration-color .2s}
 .about dd a:hover{color:var(--accent);text-decoration-color:currentColor}
+@media(min-width:801px){.about .frame{position:sticky;top:96px;width:min(100%,calc((100vh - 128px)*3/4))}}
 @media(max-width:800px){.about{grid-template-columns:1fr}.about .frame{max-width:420px}}
 .contact{border-top:1px solid var(--line)}
 .contact a.big{display:inline-block;font:300 clamp(30px,7.4vw,120px)/1.05 var(--display);letter-spacing:-.03em;text-decoration:none;margin:32px 0 48px;word-break:break-word;background:linear-gradient(var(--accent),var(--accent)) 0 100%/0 2px no-repeat;transition:background-size .5s,color .3s}
@@ -143,7 +158,8 @@ footer.site{padding:32px var(--pad);color:var(--mute);font-size:14px;display:fle
 
 <nav aria-label="Main">
   <a class="mark" href="#top">Murad Bey</a>
-  <ul>
+  <button class="menu" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="navlinks"><i></i><i></i></button>
+  <ul id="navlinks">
     <li><a href="#reel">Reel</a></li>
     <li><a href="#projects">Projects</a></li>
     <li><a href="#process">Process</a></li>
@@ -242,65 +258,65 @@ const SITE = {
     {t:"Roll: Boulder Smash!", v:{p:"vimeo", id:"77446142"}, type:"Trailer", client:"All Things Media", sw:"3ds Max, V-Ray", role:"Character modeling, rigging and animation, scene lighting and rendering"}
   ],
   gallery: [   // r = width / height of the image. Replace captions with your own.
-    {img:"images/gallery-1.jpg", cap:"SOG character, close-up", r:1.778, a:"#cfd3ff", b:"#ffd9a8"},
-    {img:"images/gallery-2.jpg", cap:"MX-5, front three-quarter", r:1.778, a:"#d9f0e4", b:"#ffffff"},
-    {img:"images/gallery-3.jpg", cap:"Charm, face study", r:1.778, a:"#ffd6dc", b:"#f6e6b8"},
-    {img:"images/gallery-4.jpg", cap:"Dawn, character turnaround", r:1.778, a:"#dff1ff", b:"#cfd3ff"},
-    {img:"images/gallery-5.jpg", cap:"Eve, head turnaround", r:1.778, a:"#f6e6b8", b:"#ffffff"},
-    {img:"images/gallery-6.jpg", cap:"Apartment interior", r:1.778, a:"#e3d4ff", b:"#ffffff"},
-    {img:"images/gallery-7.jpg", cap:"Supermarket interior", r:1.778, a:"#cfd3ff", b:"#ffd9a8"},
-    {img:"images/gallery-8.jpg", cap:"MX-5, rear three-quarter", r:1.778, a:"#d9f0e4", b:"#ffffff"},
-    {img:"images/gallery-9.jpg", cap:"MX-5, side", r:1.778, a:"#ffd6dc", b:"#f6e6b8"},
-    {img:"images/gallery-10.jpg", cap:"Charm, model turnaround", r:1.778, a:"#dff1ff", b:"#cfd3ff"},
-    {img:"images/gallery-11.jpg", cap:"Charm, character turnaround", r:1.778, a:"#f6e6b8", b:"#ffffff"},
-    {img:"images/gallery-12.jpg", cap:"SOG character, turnaround", r:1.778, a:"#e3d4ff", b:"#ffffff"},
-    {img:"images/gallery-13.jpg", cap:"SOG character, rear views", r:1.778, a:"#cfd3ff", b:"#ffd9a8"},
-    {img:"images/gallery-14.jpg", cap:"SOG character, front and back", r:1.778, a:"#d9f0e4", b:"#ffffff"},
-    {img:"images/gallery-15.jpg", cap:"SOG character, side and back", r:1.778, a:"#ffd6dc", b:"#f6e6b8"},
-    {img:"images/gallery-16.jpg", cap:"SOG character, head detail", r:1.778, a:"#dff1ff", b:"#cfd3ff"},
-    {img:"images/gallery-17.jpg", cap:"SOG character, head profile", r:1.778, a:"#f6e6b8", b:"#ffffff"},
-    {img:"images/gallery-18.jpg", cap:"Dawn, head turnaround", r:1.778, a:"#e3d4ff", b:"#ffffff"},
-    {img:"images/gallery-19.jpg", cap:"Eve, character turnaround", r:1.778, a:"#cfd3ff", b:"#ffd9a8"},
-    {img:"images/gallery-20.jpg", cap:"Dawn, progression", r:1.778, a:"#d9f0e4", b:"#ffffff"},
-    {img:"images/gallery-21.jpg", cap:"Eve, body progression", r:1.343, a:"#ffd6dc", b:"#f6e6b8"},
-    {img:"images/gallery-22.jpg", cap:"Eve, materials", r:1.343, a:"#dff1ff", b:"#cfd3ff"},
-    {img:"images/gallery-23.jpg", cap:"MX-5, body progression", r:1.778, a:"#f6e6b8", b:"#ffffff"},
-    {img:"images/gallery-24.jpg", cap:"MX-5, materials", r:1.778, a:"#e3d4ff", b:"#ffffff"},
-    {img:"images/gallery-25.jpg", cap:"MX-5, tires and wheels", r:1.778, a:"#cfd3ff", b:"#ffd9a8"},
-    {img:"images/gallery-26.jpg", cap:"SOG character, body progression", r:1.343, a:"#d9f0e4", b:"#ffffff"},
-    {img:"images/gallery-27.jpg", cap:"SOG character, materials", r:1.19, a:"#ffd6dc", b:"#f6e6b8"},
-    {img:"images/gallery-28.jpg", cap:"Armchair", r:1.0, a:"#dff1ff", b:"#cfd3ff"},
-    {img:"images/gallery-29.jpg", cap:"Sofa", r:1.0, a:"#f6e6b8", b:"#ffffff"},
-    {img:"images/gallery-30.jpg", cap:"Coffee table", r:1.0, a:"#e3d4ff", b:"#ffffff"},
-    {img:"images/gallery-31.jpg", cap:"Bookcase", r:1.0, a:"#cfd3ff", b:"#ffd9a8"},
-    {img:"images/gallery-32.jpg", cap:"Cabinet", r:1.0, a:"#d9f0e4", b:"#ffffff"},
-    {img:"images/gallery-33.jpg", cap:"Computer desk", r:1.0, a:"#ffd6dc", b:"#f6e6b8"},
-    {img:"images/gallery-34.jpg", cap:"Office chair", r:1.0, a:"#dff1ff", b:"#cfd3ff"},
-    {img:"images/gallery-35.jpg", cap:"Computer monitor", r:1.0, a:"#f6e6b8", b:"#ffffff"},
-    {img:"images/gallery-36.jpg", cap:"Computer tower", r:1.0, a:"#e3d4ff", b:"#ffffff"},
-    {img:"images/gallery-37.jpg", cap:"Computer speakers", r:1.0, a:"#cfd3ff", b:"#ffd9a8"},
-    {img:"images/gallery-38.jpg", cap:"Keyboard", r:1.0, a:"#d9f0e4", b:"#ffffff"},
-    {img:"images/gallery-39.jpg", cap:"Mouse", r:1.0, a:"#ffd6dc", b:"#f6e6b8"},
-    {img:"images/gallery-40.jpg", cap:"Nightstand", r:1.0, a:"#dff1ff", b:"#cfd3ff"},
-    {img:"images/gallery-41.jpg", cap:"Ottoman", r:1.0, a:"#f6e6b8", b:"#ffffff"},
-    {img:"images/gallery-42.jpg", cap:"Floor lamp", r:1.0, a:"#e3d4ff", b:"#ffffff"},
-    {img:"images/gallery-43.jpg", cap:"Light fixture", r:1.0, a:"#cfd3ff", b:"#ffd9a8"},
-    {img:"images/gallery-44.jpg", cap:"Wall clock", r:1.0, a:"#d9f0e4", b:"#ffffff"},
-    {img:"images/gallery-45.jpg", cap:"Wall shelf", r:1.0, a:"#ffd6dc", b:"#f6e6b8"},
-    {img:"images/gallery-46.jpg", cap:"Shelf with books", r:1.0, a:"#dff1ff", b:"#cfd3ff"},
-    {img:"images/gallery-47.jpg", cap:"Stacked books", r:1.0, a:"#f6e6b8", b:"#ffffff"},
-    {img:"images/gallery-48.jpg", cap:"Picture frames", r:1.0, a:"#e3d4ff", b:"#ffffff"},
-    {img:"images/gallery-49.jpg", cap:"Radio", r:1.0, a:"#cfd3ff", b:"#ffd9a8"},
-    {img:"images/gallery-50.jpg", cap:"TV bench", r:1.0, a:"#d9f0e4", b:"#ffffff"},
-    {img:"images/gallery-51.jpg", cap:"TV", r:1.0, a:"#ffd6dc", b:"#f6e6b8"},
-    {img:"images/gallery-52.jpg", cap:"Table vases", r:1.0, a:"#dff1ff", b:"#cfd3ff"},
-    {img:"images/gallery-53.jpg", cap:"Spiral vase", r:1.0, a:"#f6e6b8", b:"#ffffff"},
-    {img:"images/gallery-54.jpg", cap:"Decorative boxes", r:1.0, a:"#e3d4ff", b:"#ffffff"},
-    {img:"images/gallery-55.jpg", cap:"Snake plant", r:1.0, a:"#cfd3ff", b:"#ffd9a8"},
-    {img:"images/gallery-56.jpg", cap:"Interior doors", r:1.0, a:"#d9f0e4", b:"#ffffff"},
-    {img:"images/gallery-57.jpg", cap:"Window blinds", r:1.0, a:"#ffd6dc", b:"#f6e6b8"},
-    {img:"images/gallery-58.jpg", cap:"Baseboard heater", r:1.0, a:"#dff1ff", b:"#cfd3ff"},
-    {img:"images/gallery-59.jpg", cap:"Power sockets", r:1.0, a:"#f6e6b8", b:"#ffffff"}
+    {img:"images/gallery-1.jpg", cap:"SOG character, close-up", r:1.778, a:"#ecebf0", b:"#f6f5f9"},
+    {img:"images/gallery-2.jpg", cap:"SOG character, turnaround", r:1.778, a:"#ecebf0", b:"#f6f5f9"},
+    {img:"images/gallery-3.jpg", cap:"SOG character, rear views", r:1.778, a:"#ecebf0", b:"#f6f5f9"},
+    {img:"images/gallery-4.jpg", cap:"SOG character, front and back", r:1.778, a:"#ecebf0", b:"#f6f5f9"},
+    {img:"images/gallery-5.jpg", cap:"SOG character, side and back", r:1.778, a:"#ecebf0", b:"#f6f5f9"},
+    {img:"images/gallery-6.jpg", cap:"SOG character, head detail", r:1.778, a:"#ecebf0", b:"#f6f5f9"},
+    {img:"images/gallery-7.jpg", cap:"SOG character, head profile", r:1.778, a:"#ecebf0", b:"#f6f5f9"},
+    {img:"images/gallery-8.jpg", cap:"SOG character, body progression", r:1.343, a:"#ecebf0", b:"#f6f5f9"},
+    {img:"images/gallery-9.jpg", cap:"SOG character, materials", r:1.19, a:"#ecebf0", b:"#f6f5f9"},
+    {img:"images/gallery-10.jpg", cap:"MX-5, side", r:1.778, a:"#ecebf0", b:"#f6f5f9"},
+    {img:"images/gallery-11.jpg", cap:"MX-5, rear three-quarter", r:1.778, a:"#ecebf0", b:"#f6f5f9"},
+    {img:"images/gallery-12.jpg", cap:"MX-5, front three-quarter", r:1.778, a:"#ecebf0", b:"#f6f5f9"},
+    {img:"images/gallery-13.jpg", cap:"MX-5, body progression", r:1.778, a:"#ecebf0", b:"#f6f5f9"},
+    {img:"images/gallery-14.jpg", cap:"MX-5, materials", r:1.778, a:"#ecebf0", b:"#f6f5f9"},
+    {img:"images/gallery-15.jpg", cap:"MX-5, tires and wheels", r:1.778, a:"#ecebf0", b:"#f6f5f9"},
+    {img:"images/gallery-16.jpg", cap:"Charm, face study", r:1.778, a:"#ecebf0", b:"#f6f5f9"},
+    {img:"images/gallery-17.jpg", cap:"Charm, model turnaround", r:1.778, a:"#ecebf0", b:"#f6f5f9"},
+    {img:"images/gallery-18.jpg", cap:"Charm, character turnaround", r:1.778, a:"#ecebf0", b:"#f6f5f9"},
+    {img:"images/gallery-19.jpg", cap:"Dawn, character turnaround", r:1.778, a:"#ecebf0", b:"#f6f5f9"},
+    {img:"images/gallery-20.jpg", cap:"Dawn, head turnaround", r:1.778, a:"#ecebf0", b:"#f6f5f9"},
+    {img:"images/gallery-21.jpg", cap:"Dawn, progression", r:1.778, a:"#ecebf0", b:"#f6f5f9"},
+    {img:"images/gallery-22.jpg", cap:"Eve, head turnaround", r:1.778, a:"#ecebf0", b:"#f6f5f9"},
+    {img:"images/gallery-23.jpg", cap:"Eve, character turnaround", r:1.778, a:"#ecebf0", b:"#f6f5f9"},
+    {img:"images/gallery-24.jpg", cap:"Eve, body progression", r:1.343, a:"#ecebf0", b:"#f6f5f9"},
+    {img:"images/gallery-25.jpg", cap:"Eve, materials", r:1.343, a:"#ecebf0", b:"#f6f5f9"},
+    {img:"images/gallery-26.jpg", cap:"Supermarket interior", r:1.778, a:"#ecebf0", b:"#f6f5f9"},
+    {img:"images/gallery-27.jpg", cap:"Apartment interior", r:1.778, a:"#ecebf0", b:"#f6f5f9"},
+    {img:"images/gallery-28.jpg", cap:"Armchair", r:1.0, a:"#ecebf0", b:"#f6f5f9"},
+    {img:"images/gallery-29.jpg", cap:"Sofa", r:1.0, a:"#ecebf0", b:"#f6f5f9"},
+    {img:"images/gallery-30.jpg", cap:"Coffee table", r:1.0, a:"#ecebf0", b:"#f6f5f9"},
+    {img:"images/gallery-31.jpg", cap:"Bookcase", r:1.0, a:"#ecebf0", b:"#f6f5f9"},
+    {img:"images/gallery-32.jpg", cap:"Cabinet", r:1.0, a:"#ecebf0", b:"#f6f5f9"},
+    {img:"images/gallery-33.jpg", cap:"Computer desk", r:1.0, a:"#ecebf0", b:"#f6f5f9"},
+    {img:"images/gallery-34.jpg", cap:"Office chair", r:1.0, a:"#ecebf0", b:"#f6f5f9"},
+    {img:"images/gallery-35.jpg", cap:"Computer monitor", r:1.0, a:"#ecebf0", b:"#f6f5f9"},
+    {img:"images/gallery-36.jpg", cap:"Computer tower", r:1.0, a:"#ecebf0", b:"#f6f5f9"},
+    {img:"images/gallery-37.jpg", cap:"Computer speakers", r:1.0, a:"#ecebf0", b:"#f6f5f9"},
+    {img:"images/gallery-38.jpg", cap:"Keyboard", r:1.0, a:"#ecebf0", b:"#f6f5f9"},
+    {img:"images/gallery-39.jpg", cap:"Mouse", r:1.0, a:"#ecebf0", b:"#f6f5f9"},
+    {img:"images/gallery-40.jpg", cap:"Nightstand", r:1.0, a:"#ecebf0", b:"#f6f5f9"},
+    {img:"images/gallery-41.jpg", cap:"Ottoman", r:1.0, a:"#ecebf0", b:"#f6f5f9"},
+    {img:"images/gallery-42.jpg", cap:"Floor lamp", r:1.0, a:"#ecebf0", b:"#f6f5f9"},
+    {img:"images/gallery-43.jpg", cap:"Light fixture", r:1.0, a:"#ecebf0", b:"#f6f5f9"},
+    {img:"images/gallery-44.jpg", cap:"Wall clock", r:1.0, a:"#ecebf0", b:"#f6f5f9"},
+    {img:"images/gallery-45.jpg", cap:"Wall shelf", r:1.0, a:"#ecebf0", b:"#f6f5f9"},
+    {img:"images/gallery-46.jpg", cap:"Shelf with books", r:1.0, a:"#ecebf0", b:"#f6f5f9"},
+    {img:"images/gallery-47.jpg", cap:"Stacked books", r:1.0, a:"#ecebf0", b:"#f6f5f9"},
+    {img:"images/gallery-48.jpg", cap:"Picture frames", r:1.0, a:"#ecebf0", b:"#f6f5f9"},
+    {img:"images/gallery-49.jpg", cap:"Radio", r:1.0, a:"#ecebf0", b:"#f6f5f9"},
+    {img:"images/gallery-50.jpg", cap:"TV bench", r:1.0, a:"#ecebf0", b:"#f6f5f9"},
+    {img:"images/gallery-51.jpg", cap:"TV", r:1.0, a:"#ecebf0", b:"#f6f5f9"},
+    {img:"images/gallery-52.jpg", cap:"Table vases", r:1.0, a:"#ecebf0", b:"#f6f5f9"},
+    {img:"images/gallery-53.jpg", cap:"Spiral vase", r:1.0, a:"#ecebf0", b:"#f6f5f9"},
+    {img:"images/gallery-54.jpg", cap:"Decorative boxes", r:1.0, a:"#ecebf0", b:"#f6f5f9"},
+    {img:"images/gallery-55.jpg", cap:"Snake plant", r:1.0, a:"#ecebf0", b:"#f6f5f9"},
+    {img:"images/gallery-56.jpg", cap:"Interior doors", r:1.0, a:"#ecebf0", b:"#f6f5f9"},
+    {img:"images/gallery-57.jpg", cap:"Window blinds", r:1.0, a:"#ecebf0", b:"#f6f5f9"},
+    {img:"images/gallery-58.jpg", cap:"Baseboard heater", r:1.0, a:"#ecebf0", b:"#f6f5f9"},
+    {img:"images/gallery-59.jpg", cap:"Power sockets", r:1.0, a:"#ecebf0", b:"#f6f5f9"}
   ],
   steps: [
     {t:"Sketch", p:"Thumbnails and rough poses find the idea of the asset before anything is finalized.", img:"images/process-1.jpg", r:0.764, a:"#ffffff", b:"#e8e6ec"},
@@ -322,6 +338,7 @@ function hook(root){
     const bad=()=>i.parentElement.classList.add("ph");
     i.addEventListener("error",bad);
     if(i.complete&&i.naturalWidth===0)bad();
+    else if(!i.complete&&i.closest(".frame")){i.classList.add("fade");i.addEventListener("load",()=>i.classList.remove("fade"))}
   });
 }
 
@@ -402,7 +419,15 @@ $("#masonry").addEventListener("click",e=>{const f=e.target.closest("figure");if
 $("#masonry").addEventListener("keydown",e=>{if(e.key==="Enter"||e.key===" "){const f=e.target.closest("figure");if(f){e.preventDefault();open(+f.dataset.i)}}});
 $("#lbNext").onclick=()=>show(cur+1);$("#lbPrev").onclick=()=>show(cur-1);$("#lbClose").onclick=()=>lb.close();
 lb.addEventListener("keydown",e=>{if(e.key==="ArrowRight")show(cur+1);if(e.key==="ArrowLeft")show(cur-1)});
-lb.addEventListener("click",e=>{if(e.target===lb)lb.close()});
+lb.addEventListener("click",e=>{if(!e.target.closest("img,button,#lbCap"))lb.close()});
+/* Swipe left/right to change image on touch screens */
+let sx=0,sy=0;
+lb.addEventListener("touchstart",e=>{if(e.touches.length===1){sx=e.touches[0].clientX;sy=e.touches[0].clientY}},{passive:true});
+lb.addEventListener("touchend",e=>{
+  if(e.changedTouches.length!==1)return;
+  const dx=e.changedTouches[0].clientX-sx,dy=e.changedTouches[0].clientY-sy;
+  if(Math.abs(dx)>50&&Math.abs(dx)>Math.abs(dy)*1.5)show(cur+(dx<0?1:-1));
+},{passive:true});
 
 /* Project video dialog */
 const vd=$("#vd");
@@ -417,8 +442,17 @@ function openVideo(p){
 }
 $("#projectGrid").addEventListener("click",e=>{const b=e.target.closest(".play");if(b)openVideo(SITE.projects[+b.dataset.i])});
 $("#vdClose").onclick=()=>vd.close();
-vd.addEventListener("click",e=>{if(e.target===vd)vd.close()});
+vd.addEventListener("click",e=>{if(!e.target.closest("iframe,button,#vdCap"))vd.close()});
 vd.addEventListener("close",()=>{$("#vdStage").innerHTML=""});
+
+/* Mobile menu */
+const nav=$("nav"),menu=$(".menu");
+const setMenu=o=>{nav.classList.toggle("open",o);menu.setAttribute("aria-expanded",o);menu.setAttribute("aria-label",o?"Close menu":"Open menu")};
+menu.addEventListener("click",()=>setMenu(!nav.classList.contains("open")));
+nav.querySelectorAll("a").forEach(a=>a.addEventListener("click",()=>setMenu(false)));
+document.addEventListener("click",e=>{if(!nav.contains(e.target))setMenu(false)});
+document.addEventListener("keydown",e=>{if(e.key==="Escape")setMenu(false)});
+matchMedia("(min-width:721px)").addEventListener("change",e=>{if(e.matches)setMenu(false)});
 
 /* Active nav link */
 const links=[...document.querySelectorAll("nav ul a")];
